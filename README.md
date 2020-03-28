@@ -1,4 +1,4 @@
-# Semana Omnitack 11
+# Semana Omnistack 11
 
 Programa de ONG
 
