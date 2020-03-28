@@ -22,7 +22,21 @@ module.exports={
             uf,
         })
         return response.json({id});
-    }
+    },
+
+    async delete(request, response){
+        const {id} = request.params;
+        const ongs = await connection('ongs').where('id', id).del();
+        return response.json(ongs);
+    },
+
+    async show(request, response){        
+        const {id} = request.params;
+        const ongs = await connection('ongs').select('*').where('id', id);                
+        return response.json(ongs);
+    },
+
+
 };
 
 /**

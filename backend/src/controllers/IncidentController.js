@@ -2,14 +2,14 @@ const connection = require('../database/connection');
 
 module.exports = {
     async index(request,response){
-        const{page=1} = request.query;
+        const { page = 1 } = request.query;
 
         const [count] = await connection('incidents').count();
 
         const incidents = await connection('incidents')
         .join('ongs', 'ongs.id', '=', 'incidents.ong_id')
         .limit(5)
-        .offset((page-1)*5)
+        .offset((page - 1) * 5)
         .select([
             'incidents.*',
             'ongs.name',
@@ -44,7 +44,15 @@ module.exports = {
         const incident = await connection('incidents')
         .where('id', id)
         .select('ong_id')
-        .first();
+        .first()
+        .catch(function(error) {            
+            return response.json(error);            
+        });
+
+        // Incident nao encontrado
+        if(!incident){
+            return response.status(401).json({ error:'Incident not found.'});            
+        }
 
         if(incident.ong_id != ong_id){
             return response.status(401).json({ error:'Operation not permitted.'});
